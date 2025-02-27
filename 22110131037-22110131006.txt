@@ -1,0 +1,515 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#include <locale.h>
+
+#include <time.h>
+
+#include <conio.h>
+
+#include <ctype.h>
+
+void canx(int can) {
+
+  if (can == 2) {
+    system("cls");
+    printf("2 canýnýz kaldý.\n");
+
+  }
+  if (can == 1) {
+    system("cls");
+    printf("1 canýnýz kaldý.\n");
+
+  }
+}
+
+void yazdirma(int matris[10][10]) {
+
+  int k, l;
+  for (k = 0; k < 10; k++) {
+    for (l = 0; l < 10; l++) {
+      if (matris[k][l] == 2) {
+        printf("  0", matris[k][l]);
+      } else if (matris[k][l] == 3) {
+        printf("  0", matris[k][l]);
+      } else
+        printf("  %d", matris[k][l]);
+    }
+    printf("\n");
+  }
+
+}
+
+int avciKordinatx(int matris[10][10]) {
+
+  int i, j;
+  int x = 0;
+  for (i = 0; i < 10; i++) {
+    for (j = 0; j < 10; j++) {
+      if (matris[i][j] == 1) {
+        x = i;
+      }
+    }
+  }
+  return x;
+}
+int avciKordinaty(int matris[10][10]) {
+
+  int i, j;
+  int y = 0;
+  for (i = 0; i < 10; i++) {
+    for (j = 0; j < 10; j++) {
+      if (matris[i][j] == 1) {
+        y = j;
+      }
+    }
+  }
+  return y;
+}
+
+int main() {
+  srand(time(NULL));
+  setlocale(LC_ALL, "Turkish");
+  int x[5][2];
+  int matris[10][10];
+  int i, j, g, rastx[5], rasty[5], depo = 0, rasta[5], rastb[5];
+
+  for (i = 0; i < 10; i++) {
+    for (j = 0; j < 10; j++)
+      matris[i][j] = 0;
+  }
+
+  etiket: ;
+
+  for (i = 0; i < 5; i++) {
+    rastx[i] = rand() % 10;
+    rasty[i] = rand() % 10;
+
+    matris[rastx[i]][rasty[i]] = 2;
+  }
+
+  for (i = 0; i < 10; i++) {
+    for (j = 0; j < 10; j++) {
+      matris[2][4] = 1;
+      if (matris[i][j] == 2)
+        depo++;
+    }
+  }
+  if (depo < 5) {
+
+    for (i = 0; i < 10; i++) {
+      for (j = 0; j < 10; j++)
+        matris[i][j] = 0;
+    }
+    matris[2][4] = 1;
+    goto etiket;
+  }
+
+  
+  int sayac = 0;
+  label: ;
+  for (g = 0; g < 5;) {
+    rasta[g] = rand() % 10;
+    rastb[g] = rand() % 10;
+    if (matris[rasta[g]][rastb[g]] != 1 && matris[rasta[g]][rastb[g]] != 2) {
+      if (rastx[g] - 1 == rasta[g] && rasty[g] - 1 == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      } else if (rastx[g] - 1 == rasta[g] && rasty[g] == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      } else if (rastx[g] - 1 == rasta[g] && rasty[g] + 1 == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      } else if (rastx[g] == rasta[g] && rasty[g] - 1 == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      } else if (rastx[g] == rasta[g] && rasty[g] + 1 == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      } else if (rastx[g] + 1 == rasta[g] && rasty[g] - 1 == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+
+      } else if (rastx[g] + 1 == rasta[g] && rasty[g] == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      } else if (rastx[g] + 1 == rasta[g] && rasty[g] + 1 == rastb[g]) {
+        matris[rasta[g]][rastb[g]] = 3;
+        sayac++;
+        g++;
+      }
+
+    }
+
+  }
+  if (sayac < 5)
+    goto label;
+  
+
+  yazdirma(matris);
+  
+
+  int m, n, can = 3, mesafe[5][2], elmas = 0, k;
+  int msf;
+  for (msf = 0; msf < 5; msf++) {
+    mesafe[msf][1] = 0;
+  }
+  eti:
+    for (m = 0; m < 10; m++) {
+      for (n = 0; n < 10; n++) {
+
+        if (matris[m][n] == 1) {
+          unsigned char yon;
+          if (kbhit()) {
+            yon = getch();
+            if (yon == 224) {
+              yon = getch();
+              switch (yon) {
+              case 75:
+                if (n == 0) {
+                  system("cls");
+                  printf("baþka yöne ilerleyiniz.\n");
+                  yazdirma(matris);
+                  continue;
+                }
+                matris[m][n] = 0;
+                if (matris[m][n - 1] == 3) {
+                  matris[2][4] = 1;
+                  matris[m][n] = 0;
+                  can--;
+                  canx(can);
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                  if (can == 0) {
+                    system("cls");
+                    printf("canýnýz kalmadý,oyun bitti.\n");
+                    return 0;
+                  }
+                } else if (matris[m][n - 1] == 2) {
+                  system("cls");
+
+                 	x[elmas][0] = m;
+                  	x[elmas][1] = n - 1;
+                  
+                  for (k = 0; k < 5; k++) {
+                    if (rastx[k] == x[elmas][0] && rasty[k] == x[elmas][1]) {
+                      printf("%d. elmas toplandý.\n", k + 1);
+                      mesafe[k][1] = 1;
+                    }
+
+                  }
+
+                  matris[m][n - 1] = 1;
+
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+
+                  }
+
+                  elmas++;
+                } else if (elmas == 5) {
+                  system("cls");
+                  printf("TEBRÝKLER KAZANDINIZ.\n");
+                  return 0;
+                } else {
+                  matris[m][n - 1] = 1;
+
+                  system("cls");
+                  yazdirma(matris);
+
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                }
+                break;
+              case 80:
+                if (m == 9) {
+                  system("cls");
+                  printf("baþka yöne ilerleyiniz.\n");
+                  yazdirma(matris);
+                  continue;
+                }
+                matris[m][n] = 0;
+
+                if (matris[m + 1][n] == 3) {
+                  matris[2][4] = 1;
+                  matris[m][n] = 0;
+                  can--;
+                  canx(can);
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                  if (can == 0) {
+                    system("cls");
+                    printf("canýnýz kalmadý,oyun bitti.\n");
+                    return 0;
+
+                  }
+                } else if (matris[m + 1][n] == 2) {
+                  system("cls");
+                  x[elmas][0] = m + 1;
+                  x[elmas][1] = n;
+                  for (k = 0; k < 5; k++) {
+
+                    if (rastx[k] == x[elmas][0] && rasty[k] == x[elmas][1]) {
+                      printf("%d. elmas toplandý.\n", k + 1);
+                      mesafe[k][1] = 1;
+                    }
+                  }
+                  matris[m + 1][n] = 1;
+                  elmas++;
+
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                } else if (elmas == 5) {
+                  system("cls");
+                  printf("TEBRÝKLER KAZANDINIZ:\n");
+                  return 0;
+                } else {
+                  matris[m + 1][n] = 1;
+
+                  system("cls");
+
+                  yazdirma(matris);
+
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+
+                  }
+                }
+                break;
+
+              case 72:
+                if (m == 0) {
+                  system("cls");
+                  printf("baþka yöne ilerleyiniz.\n");
+
+                  yazdirma(matris);
+
+                  continue;
+                }
+
+                matris[m][n] = 0;
+
+                if (matris[m - 1][n] == 3) {
+                  matris[2][4] = 1;
+                  matris[m][n] = 0;
+                  can--;
+                  canx(can);
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                  if (can == 0) {
+                    system("cls");
+                    printf("canýnýz kalmadý,oyun bitti.\n");
+                    return 0;
+
+                  }
+                } else if (matris[m - 1][n] == 2) {
+                  system("cls");
+                  x[elmas][0] = m - 1;
+                  x[elmas][1] = n;
+                  for (k = 0; k < 5; k++) {
+
+                    if (rastx[k] == x[elmas][0] && rasty[k] == x[elmas][1]) {
+                      printf("%d. elmas toplandý.\n", k + 1);
+                      mesafe[k][1] = 1;
+                    }
+                  }
+                  matris[m - 1][n] = 1;
+                  elmas++;
+
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                } else if (elmas == 5) {
+                  system("cls");
+                  printf("TEBRÝKLER KAZANDINIZ.\n");
+                  return 0;
+                } else {
+
+                  matris[m - 1][n] = 1;
+
+                  system("cls");
+
+                  yazdirma(matris);
+
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                }
+                break;
+
+              case 77:
+                if (n == 9) {
+                  system("cls");
+                  printf("baþka yöne ilerleyiniz.\n");
+
+                  yazdirma(matris);
+
+                  continue;
+                }
+
+                matris[m][n] = 0;
+                if (matris[m][n + 1] == 3) {
+                  matris[2][4] = 1;
+                  matris[m][n] = 0;
+                  can--;
+                  canx(can);
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                  if (can == 0) {
+                    system("cls");
+                    printf("canýnýz kalmadý,oyun bitti.\n");
+                    return 0;
+                  }
+                } else if (matris[m][n + 1] == 2) {
+                  system("cls");
+                  x[elmas][0] = m;
+                  x[elmas][1] = n + 1;
+                  for (k = 0; k < 5; k++) {
+
+                    if (rastx[k] == x[elmas][0] && rasty[k] == x[elmas][1]) {
+                      printf("%d. elmas toplandý.\n", k + 1);
+                      mesafe[k][1] = 1;
+                    }
+                  }
+                  matris[m][n + 1] = 1;
+                  elmas++;
+
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+                } else if (elmas == 5) {
+                  system("cls");
+                  printf("TEBRÝKLER KAZANDINIZ.\n");
+                  return 0;
+                } else {
+                  matris[m][n + 1] = 1;
+                  system("cls");
+                  yazdirma(matris);
+                  for (k = 0; k < 5; k++) {
+                    if (mesafe[k][1] == 0) {
+                      mesafe[k][0] = abs(rastx[k] - avciKordinatx(matris)) + abs(rasty[k] - avciKordinaty(matris));
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    } else if (mesafe[k][1] == 1) {
+                      mesafe[k][0] = 0;
+                      printf("%d. elmasa kalan mesafe %d\n", k + 1, mesafe[k][0]);
+                    }
+                  }
+
+                }
+                break;
+
+              default:
+                system("cls");
+
+                printf(" yanlýþ tuþa bastýnýz.\n");
+                yazdirma(matris);
+              }
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+          }
+          
+
+        }
+      }
+    }
+
+  goto eti;
+
+  return 0;
+}
